@@ -6,7 +6,6 @@ It is crucial that documents in the MongoDB collection also follow this data mod
 from pydantic import BaseModel
 
 class Todo(BaseModel):
-    id: int = None
     title: str
     description: str
     completed: bool = False

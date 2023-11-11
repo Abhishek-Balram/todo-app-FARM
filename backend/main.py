@@ -20,7 +20,7 @@ app = FastAPI()
 
 
 # Set cross origin permissions and other http communication configs
-origins = ['https://localhost:3000']
+origins = ['https://localhost:3000', 'http://localhost:3000']
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -29,7 +29,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# static (?) roots
+# static (?) routes
 
 @app.get("/")
 def read_root():
@@ -42,8 +42,8 @@ async def get_todo():
     response = await fetch_all_todos()
     return response
 
-@app.get("/api/todo{title}", response_model=Todo)       # use response_model=Todo because we are expecting it to return an instance of Todo class
-async def get_todo_by_id(title):
+@app.get("/api/todo/{title}", response_model=Todo)       # use response_model=Todo because we are expecting it to return an instance of Todo class
+async def get_todo_by_title(title:str):
     response = fetch_one_todo(title)
     if response:
         return response
@@ -58,7 +58,7 @@ async def post_todo(todo:Todo):
     else:
         raise HTTPException(400, "Bad request")
 
-@app.put("/api/todo{title}", response_model=Todo)
+@app.put("/api/todo/{title}", response_model=Todo)
 async def put_todo(title:str, desc:str):
     response = await update_todo(title, desc)
     if response:
@@ -66,8 +66,8 @@ async def put_todo(title:str, desc:str):
     else:
         raise HTTPException(404, f"There is no TODO item with this title: {title}")
 
-@app.delete("/api/todo{title}")
-async def delete_todo(title):
+@app.delete("/api/todo/{title}")
+async def delete_todo(title:str):
     response = await remove_todo(title)
     if response:
         return f"Successfully deleted todo item: {title}"
