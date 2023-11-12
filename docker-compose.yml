@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  mongo:
+    restart: always
+    image: mongo:latest
+    ports:
+      - "27017:27017"  # Map container port 27017 to host port 27017
+    volumes:
+    - mongodb_data_container:/data/db  # Mount thea named volume for MongoDB data
+
+
+  backend:
+    restart: always
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"  # Map container port 8000 to host port 8000
+    depends_on:
+      - mongo  # Ensure that the MongoDB service is started before the backend
+
+  frontend:
+    restart: always
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"  # Map container port 3000 to host port 3000
+    depends_on:
+      - mongo
+
+volumes:
+  mongodb_data_container: # Define the named volume for MongoDB data
+  

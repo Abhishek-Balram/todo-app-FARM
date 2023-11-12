@@ -9,7 +9,7 @@ from model import Todo
 import motor.motor_asyncio
 
 # Client for connection between database.py and MongoDB
-client = motor.motor_asyncio.AsyncIOMotorClient("mongodb+srv://abhi:0UwfnG7v9VxnZVNg@cluster0.oauqir0.mongodb.net/?retryWrites=true&w=majority")
+client = motor.motor_asyncio.AsyncIOMotorClient("mongodb://mongo:27017/")
 database = client.TodoList
 collection = database.todo      # collection is the same thing as a Table
 
@@ -48,4 +48,8 @@ async def update_todo(title, desc):
 
 async def remove_todo(title):
     await collection.delete_one({"title":title})
+    return True
+
+async def remove_all_todos():
+    await collection.delete_many({})
     return True
